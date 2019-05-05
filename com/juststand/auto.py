@@ -40,7 +40,7 @@ class FontColor:
 
 
 CONTENT = ['开始预定', '开始预约', '开始约', '开始预', '开始订']
-CAN_SEND = ('✨Pobaby',)
+CAN_SEND = []
 
 MESSAGE = ''
 
@@ -66,14 +66,23 @@ def inputMessage():
     # 回复
     MESSAGE = str(input('请输入回复内容，按回车键确认：'))
 
+    # 自动回复人群
+    print('')
+    print('')
+    print('')
+    print(FontColor.red + FontColor.default + "notes: 请逐次输入需要自动回复的人，输入 e 代表结束；若没有输入，则无法自动回复" + FontColor.end)
+    while True:
+        nickname = str(input('请输入名称:'))
+        if nickname == 'e':
+            break
+        if nickname:
+            CAN_SEND.append(nickname)
 
 inputMessage()
 
-
 @itchat.msg_register(itchat.content.TEXT)
-def text_reply(msg):
+def person_reply(msg):
     username = msg.User.NickName
-    print(username)
     message = msg.Content
     if username not in CAN_SEND:
         return
@@ -83,8 +92,8 @@ def text_reply(msg):
 
 
 @itchat.msg_register(itchat.content.INCOME_MSG, isGroupChat=True)
-def download_files(msg):
-    username = msg.User.PYQuanPin
+def group_reply(msg):
+    username = msg.User.NickName
     message = msg.Content
     if username not in CAN_SEND:
         return
@@ -93,11 +102,5 @@ def download_files(msg):
     return
 
 
-def chatrooms():
-    rooms = itchat.get_chatrooms()
-    print(rooms.__str__())
-
-
 itchat.auto_login()
-chatrooms()
 itchat.run()
