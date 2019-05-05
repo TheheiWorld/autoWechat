@@ -7,7 +7,7 @@
 import itchat
 
 
-CONTENT = ['开始预定', '开始预约', '开始约', '开始预', '开始订']
+CONTENT = ['开始定', '开始约', '开始预', '开始订']
 CAN_SEND = []
 
 MESSAGE = ''
@@ -17,19 +17,19 @@ print('默认回复关键字' + CONTENT.__str__())
 
 
 def inputMessage():
-    global CONTENT
+    # global CONTENT
     global MESSAGE
     # 关键字
-    print("notes: 请逐次输入今日预定关键字，输入 e 代表结束；若没有输入任何关键字，则采取默认关键字")
-    CONTENT_TEMP = []
-    while True:
-        keyword_booking = str(input('请输入关键字:'))
-        if keyword_booking == 'e':
-            break
-        if keyword_booking:
-            CONTENT_TEMP.append(keyword_booking)
-    if CONTENT_TEMP.__len__() > 0:
-        CONTENT = CONTENT_TEMP
+    # print("notes: 请逐次输入今日预定关键字，输入 e 代表结束；若没有输入任何关键字，则采取默认关键字")
+    # CONTENT_TEMP = []
+    # while True:
+    #     keyword_booking = str(input('请输入关键字:'))
+    #     if keyword_booking == 'e':
+    #         break
+    #     if keyword_booking:
+    #         CONTENT_TEMP.append(keyword_booking)
+    # if CONTENT_TEMP.__len__() > 0:
+    #     CONTENT = CONTENT_TEMP
 
     # 回复
     MESSAGE = str(input('请输入回复内容，按回车键确认：'))
@@ -53,7 +53,7 @@ def person_reply(msg):
     message = msg.Content
     if username not in CAN_SEND:
         return
-    if message in CONTENT:
+    if contains_keyword(message):
         return MESSAGE
     return
 
@@ -64,10 +64,15 @@ def group_reply(msg):
     message = msg.Content
     if username not in CAN_SEND:
         return
-    if message in CONTENT:
+    if contains_keyword(message):
         return MESSAGE
     return
 
+def contains_keyword(message):
+    for c in CONTENT:
+        if c in message:
+            return True
+    return False
 
 itchat.auto_login(hotReload=True)
 itchat.run()
